@@ -21,11 +21,11 @@ function callWeatherApi(requestOptions, callback) {
   });
 }
 
-function queryOpenWeatherApi(response) {
+function queryOpenWeatherApi(city, response) {
   var openWeatherMapOptions = {
     host: 'api.openweathermap.org',
     port: 80,
-    path: '/data/2.5/weather?units=metric&q=Stockholm',
+    path: '/data/2.5/weather?units=metric&q=' + encodeURIComponent(city),
     method: 'GET'
   }
 
@@ -38,8 +38,10 @@ function queryOpenWeatherApi(response) {
   });
 }
 
-function queryYahooWeather(response) {
-  var query = 'select * from weather.forecast where u="c" and woeid in (select woeid from geo.places(1) where text="Stockholm")';
+function queryYahooWeather(city, response) {
+  var query = 'select * from weather.forecast where u="c" and woeid in (select woeid from geo.places(1) where text="';
+  query += city;
+  query += '")';
 
   var yahooWeatherOptions = {
     host: 'query.yahooapis.com',
@@ -57,15 +59,24 @@ function queryYahooWeather(response) {
   });
 }
 
-/* GET weather for Stockholm */
-router.get('/', function (req, res, next) {
-  queryOpenWeatherApi(function (openWeatherBuffer) {
-    queryYahooWeather(function (yahooWeatherBuffer) {
-      var finalBuffer = [];
-      finalBuffer.push(openWeatherBuffer, yahooWeatherBuffer)
-      res.send(finalBuffer);
+function queryWeatherAndSendResponse(city, response) {
+  queryOpenWeatherApi(city, function (openWeatherBuffer) {
+    queryYahooWeather(city, function (yahooWeatherBuffer) {
+      var finalBuffer = [openWeatherBuffer, yahooWeatherBuffer];
+      response.send([openWeatherBuffer, yahooWeatherBuffer]);
     });
   });
+}
+
+/* GET weather for Stockholm */
+router.get('/', function (request, response, next) {
+  var city = 'Stockholm';
+  queryWeatherAndSendResponse(city, response);
+});
+
+router.get('/:city', function (request, response, next) {
+  var city = request.params.city;
+  queryWeatherAndSendResponse(city, response);
 });
 
 module.exports = router;
