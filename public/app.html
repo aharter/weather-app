@@ -24,24 +24,29 @@
 				<input ng-model="city">
 			</div>
 		</div>
-
-		<div class="row" style="text-align: center">
-			<div class="col-md-4">Open Weather</div>
-			<div class="col-md-4">Yahoo Weather</div>
-		</div>
-		<div class="row" style="text-align: center">
-			<div class="col-md-4">{{weather.openWeatherTemp}}</div>
-			<div class="col-md-4">{{weather.yahooWeatherTemp}}</div>
-		</div>
-		<div class="row" style="text-align: center">
-			<div class="col-md-8">Average</div>
-		</div>
-		<div class="row" style="text-align: center">
-			<div class="col-md-8">{{weather.avgTemp}}</div>
+		<div ng-show="validCity">
+			<div class="row" style="text-align: center">
+				<div class="col-md-8">
+					<h3>Weather in</h3> <br />
+					<h1>{{finalCity}}</h1>
+				</div>
+			</div>
+			<div class="row" style="text-align: center">
+				<div class="col-md-4">Open Weather</div>
+				<div class="col-md-4">Yahoo Weather</div>
+			</div>
+			<div class="row" style="text-align: center">
+				<div class="col-md-4">{{openWeatherTemp}} &deg;C</div>
+				<div class="col-md-4">{{yahooWeatherTemp}} &deg;C</div>
+			</div>
+			<div class="row" style="text-align: center">
+				<div class="col-md-8">Average</div>
+			</div>
+			<div class="row" style="text-align: center">
+				<div class="col-md-8">{{avgTemp}} &deg;C</div>
+			</div>
 		</div>
 	</div>
-
-
 </body>
 
 </html>
