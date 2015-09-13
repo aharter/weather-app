@@ -1,0 +1,47 @@
+<html ng-app="weatherApp">
+
+<head>
+	<title>Weather App</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="controller/weather-app.js"></script>
+</head>
+
+<body>
+	<div ng-controller="WeatherController as weather">
+		<div class="row" style="text-align: center">
+			<div class="col-md-8">
+				Enter City
+				<br />
+				<input ng-model="city">
+			</div>
+		</div>
+
+		<div class="row" style="text-align: center">
+			<div class="col-md-4">Open Weather</div>
+			<div class="col-md-4">Yahoo Weather</div>
+		</div>
+		<div class="row" style="text-align: center">
+			<div class="col-md-4">{{weather.openWeatherTemp}}</div>
+			<div class="col-md-4">{{weather.yahooWeatherTemp}}</div>
+		</div>
+		<div class="row" style="text-align: center">
+			<div class="col-md-8">Average</div>
+		</div>
+		<div class="row" style="text-align: center">
+			<div class="col-md-8">{{weather.avgTemp}}</div>
+		</div>
+	</div>
+
+
+</body>
+
+</html>
