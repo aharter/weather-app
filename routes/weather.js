@@ -53,8 +53,12 @@ function queryYahooWeather(city, response) {
   callWeatherApi(yahooWeatherOptions, function (buffer) {
     var json = JSON.parse(buffer);
     var result = {};
-    result.name = json.query.results.channel.location.city;
-    result.temperature = json.query.results.channel.item.condition.temp;
+    try {
+      result.name = json.query.results.channel.location.city;
+      result.temperature = json.query.results.channel.item.condition.temp;
+    } catch (err) {
+      result = {};
+    }
     response(result);
   });
 }
@@ -62,8 +66,13 @@ function queryYahooWeather(city, response) {
 function queryWeatherAndSendResponse(city, response) {
   queryOpenWeatherApi(city, function (openWeatherBuffer) {
     queryYahooWeather(city, function (yahooWeatherBuffer) {
-      var finalBuffer = [openWeatherBuffer, yahooWeatherBuffer];
-      response.send([openWeatherBuffer, yahooWeatherBuffer]);
+      var emptyResponse = Object.keys(openWeatherBuffer).length == 0 || Object.keys(yahooWeatherBuffer).length == 0;
+      var validResponse = !emptyResponse && openWeatherBuffer.name === city && yahooWeatherBuffer.name === city;
+      if (emptyResponse && !validResponse) {
+        response.sendStatus(400);
+      } else {
+        response.send([openWeatherBuffer, yahooWeatherBuffer]);
+      }
     });
   });
 }
